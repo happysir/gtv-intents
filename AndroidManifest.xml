@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <!-- The version number defined here is sent to the GTV box when the
      remote connects to it. This number is compared with the one defined
      in IpRemote/res/values/string.xml to determine if a new version is
      available -->
+     
 <manifest
   xmlns:android="http://schemas.android.com/apk/res/android"
   package="com.google.android.apps.tvremote"
@@ -19,7 +21,7 @@
     android:name="android.hardware.wifi" />
 
   <uses-sdk android:minSdkVersion="4" 
-    android:targetSdkVersion="14" />
+    android:targetSdkVersion="8" />
 
   <application
     android:icon="@drawable/app_icon"
@@ -46,20 +48,6 @@
       android:screenOrientation="portrait" />
 
     <activity
-      android:name="KeyboardActivity"
-      android:theme="@android:style/Theme.Translucent.NoTitleBar"
-      android:windowSoftInputMode="stateAlwaysVisible|adjustResize"
-      android:configChanges="orientation|keyboardHidden"
-      android:screenOrientation="sensor" />
-
-    <activity
-      android:name="ShortcutsActivity"
-      android:theme="@android:style/Theme.NoTitleBar"
-      android:windowSoftInputMode="adjustPan"
-      android:configChanges="orientation|keyboardHidden"
-      android:screenOrientation="portrait" />
-
-    <activity
       android:name="DeviceFinder"
       android:theme="@android:style/Theme.Translucent.NoTitleBar"
       android:label="@string/finder_label"
@@ -70,18 +58,6 @@
       android:theme="@android:style/Theme.Translucent.NoTitleBar"
       android:label="@string/pairing_activity_label"
       android:launchMode="singleTop" />
-
-    <activity
-      android:name="AboutActivity"
-      android:theme="@android:style/Theme.NoTitleBar"
-      android:launchMode="singleTask"
-      android:screenOrientation="portrait" />
-
-    <activity
-      android:name="TutorialActivity"
-      android:theme="@android:style/Theme.NoTitleBar"
-      android:launchMode="singleTask"
-      android:screenOrientation="portrait" />
 
     <service
       android:name="CoreService"

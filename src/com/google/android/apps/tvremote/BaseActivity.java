@@ -24,8 +24,6 @@ import com.google.android.apps.tvremote.protocol.ICommandSender;
 import com.google.android.apps.tvremote.protocol.QueuingSender;
 import com.google.android.apps.tvremote.util.Action;
 import com.google.android.apps.tvremote.util.Debug;
-import com.google.android.apps.tvremote.widget.SoftDpad;
-import com.google.android.apps.tvremote.widget.SoftDpad.DpadListener;
 
 import android.content.Context;
 import android.content.Intent;
@@ -151,10 +149,6 @@ public class BaseActivity extends CoreServiceActivity
       case KeyEvent.KEYCODE_VOLUME_UP:
         Action.VOLUME_UP.execute(getCommands());
         return true;
-      case KeyEvent.KEYCODE_SEARCH:
-        Action.NAVBAR.execute(getCommands());
-        showActivity(KeyboardActivity.class);
-        return true;
     }
     return super.onKeyDown(keyCode, event);
   }
@@ -177,15 +171,9 @@ public class BaseActivity extends CoreServiceActivity
   @Override
   public boolean onOptionsItemSelected(MenuItem item) {
     switch (item.getItemId()) {
-
       case R.id.menu_switch:
         getConnectionManager().requestDeviceFinder();
         return true;
-
-      case R.id.menu_about:
-        showActivity(AboutActivity.class);
-        return true;
-
       default:
         return super.onOptionsItemSelected(item);
     }
@@ -287,28 +275,6 @@ public class BaseActivity extends CoreServiceActivity
     return commands;
   }
 
-  @Override
-  public void onConfigurationChanged(Configuration newConfig) {
-    super.onConfigurationChanged(newConfig);
-    if (newConfig.hardKeyboardHidden == Configuration.HARDKEYBOARDHIDDEN_NO) {
-      onKeyboardOpened();
-    }
-    if (newConfig.hardKeyboardHidden == Configuration.HARDKEYBOARDHIDDEN_YES) {
-      onKeyboardClosed();
-    }
-  }
-
-  /**
-   * Called when the physical keyboard is opened.
-   * <p>
-   * The default behavior is to close the current activity and to start the
-   * keyboard activity. Extending classes can override to change behavior.
-   */
-  protected void onKeyboardOpened() {
-    showActivity(KeyboardActivity.class);
-    finish();
-  }
-
   /**
    * Called when the physical keyboard is closed.
    * <p>
@@ -324,57 +290,6 @@ public class BaseActivity extends CoreServiceActivity
   protected boolean isLandscape() {
     return (getResources().getConfiguration().orientation ==
         Configuration.ORIENTATION_LANDSCAPE);
-  }
-
-  /**
-   * Returns a default implementation for the DpadListener.
-   */
-  protected DpadListener getDefaultDpadListener() {
-    return new DpadListener() {
-
-      public void onDpadClicked() {
-        if(getCommands() != null) {
-          Action.DPAD_CENTER.execute(getCommands());
-        }
-      }
-
-      public void onDpadMoved(SoftDpad.Direction direction, boolean pressed) {
-        Action action = translateDirection(direction, pressed);
-        if (action != null) {
-          action.execute(getCommands());
-        }
-      }
-    };
-  }
-
-  /**
-   * Translates a direction and a key pressed in an action.
-   *
-   * @param direction the direction of the movement
-   * @param pressed   {@code true} if the key was pressed
-   */
-  private static Action translateDirection(SoftDpad.Direction direction,
-      boolean pressed) {
-    switch (direction) {
-      case DOWN:
-        return pressed ? Action.DPAD_DOWN_PRESSED
-            : Action.DPAD_DOWN_RELEASED;
-
-      case LEFT:
-        return pressed ? Action.DPAD_LEFT_PRESSED
-            : Action.DPAD_LEFT_RELEASED;
-
-      case RIGHT:
-        return pressed ? Action.DPAD_RIGHT_PRESSED
-            : Action.DPAD_RIGHT_RELEASED;
-
-      case UP:
-        return pressed ? Action.DPAD_UP_PRESSED
-            : Action.DPAD_UP_RELEASED;
-
-      default:
-        return null;
-    }
   }
 
   private void connect() {
